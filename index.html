@@ -1,63 +1,171 @@
-<div id="law" class="tab-content space-y-4">
-    <div class="bg-white p-6 rounded-3xl border-2 border-dashed border-blue-300 text-center">
-        <i class="fa fa-copy text-4xl text-blue-500 mb-2"></i>
-        <h3 class="font-bold text-slate-800">Mock Test Upload</h3>
-        <p class="text-[10px] text-slate-400 mb-4">Multiple photos select karein (Question + Answer)</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A&L BADSHAH v4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        button:active { transform: scale(0.95); }
+        input, textarea { border-radius: 12px !important; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans pb-32">
+    <div class="max-w-md mx-auto p-4">
         
-        <input type="file" id="fileInp" multiple class="hidden" onchange="handleMultipleFiles(event)">
-        <label for="fileInp" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold cursor-pointer inline-block shadow-lg">UPLOAD ALL PHOTOS</label>
-        
-        <div id="multiPreview" class="grid grid-cols-3 gap-2 mt-4"></div>
+        <header class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tighter">A&L <span class="text-blue-600">BADSHAH</span></h1>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mission 90+ Accounts | 60+ Law</p>
+            </div>
+            <div class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg font-black text-xs">CA</div>
+        </header>
+
+        <div id="dashboard" class="tab-content active space-y-4">
+            <div class="relative">
+                <i class="fa fa-search absolute left-4 top-4 text-slate-400"></i>
+                <input type="text" id="searchInput" oninput="checkSearch()" placeholder='Type "STUDY ROOT" to see progress...' 
+                       class="w-full pl-12 pr-4 py-4 rounded-2xl shadow-sm outline-none border-none bg-white font-bold text-slate-700">
+            </div>
+
+            <div id="rootAnalysis" class="hidden bg-white p-5 rounded-[2.5rem] border-4 border-blue-500 shadow-2xl transition-all">
+                <h3 class="text-blue-600 font-black text-sm mb-3 flex items-center gap-2 italic underline">🚀 ROOT PROGRESS TRACKER</h3>
+                <div id="notesContainer" class="space-y-3 max-h-60 overflow-y-auto">
+                    <p class="text-[10px] text-slate-400 italic">Abhi tak koi data save nahi hua...</p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-[2.5rem] text-white shadow-xl">
+                <p class="text-[10px] font-bold opacity-60 uppercase mb-2">Current Focus</p>
+                <p class="text-lg font-bold italic">"Har answer ICAI standard ka hona chahiye!"</p>
+            </div>
+        </div>
+
+        <div id="law" class="tab-content space-y-4">
+            <div class="bg-white p-6 rounded-[2.5rem] border-2 border-dashed border-blue-200 text-center shadow-sm">
+                <i class="fa fa-file-signature text-4xl text-blue-500 mb-3"></i>
+                <h3 class="font-black text-slate-800 text-lg">Mock Test Upload</h3>
+                <p class="text-[10px] text-slate-400 mb-4 font-bold uppercase">Select multiple photos of your answer</p>
+                
+                <input type="file" id="fileInp" multiple class="hidden" onchange="handleFiles(event)">
+                <label for="fileInp" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-black cursor-pointer inline-block shadow-lg active:scale-95 transition">
+                    SELECT PHOTOS
+                </label>
+                
+                <div id="previewGrid" class="grid grid-cols-3 gap-2 mt-4"></div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-slate-100">
+                <div class="bg-slate-900 text-white p-4 text-[10px] font-black flex justify-between tracking-widest">
+                    <span>EVALUATION GRID</span>
+                    <span class="text-blue-400 underline">COPY CHECKING</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-[11px] text-left">
+                        <thead class="bg-slate-100 text-slate-500 uppercase font-bold">
+                            <tr>
+                                <th class="p-3 border-r">Question</th>
+                                <th class="p-3 border-r">Suggested</th>
+                                <th class="p-3">My Final Ans</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evalTable" class="divide-y divide-slate-100 font-medium">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-100">
-        <table class="w-full text-[11px] text-left border-collapse">
-            <thead class="bg-slate-800 text-white font-bold uppercase">
-                <tr>
-                    <th class="p-3 border-r border-slate-700">Question</th>
-                    <th class="p-3 border-r border-slate-700">Suggested</th>
-                    <th class="p-3">Final Ans</th>
-                </tr>
-            </thead>
-            <tbody id="evalTable" class="text-slate-600 bg-white font-medium italic">
-                <tr>
-                    <td class="p-3 border-r border-b border-slate-100">Click + to add</td>
-                    <td class="p-3 border-r border-b border-slate-100 italic">ICAI Key...</td>
-                    <td class="p-3 border-b border-slate-100">Review...</td>
-                </tr>
-            </tbody>
-        </table>
+    <div id="modal" class="fixed inset-0 bg-slate-900/90 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-md">
+        <div class="bg-white w-full p-8 rounded-[3rem] shadow-2xl">
+            <h3 class="font-black text-2xl mb-1 text-slate-900 italic">Log Entry</h3>
+            <p class="text-[10px] text-slate-400 mb-6 font-bold tracking-widest uppercase">Format: Topic | Keyword | Result</p>
+            
+            <textarea id="noteInp" class="w-full p-5 bg-slate-100 rounded-3xl mb-6 h-32 outline-none border-none text-sm font-bold placeholder:opacity-50" 
+                      placeholder="e.g. BRS | Cashbook Target | Balanced"></textarea>
+            
+            <div class="flex gap-4">
+                <button onclick="closeModal()" class="flex-1 py-4 font-black text-slate-400 uppercase text-xs tracking-widest">Cancel</button>
+                <button onclick="saveNote()" class="flex-1 py-4 bg-blue-600 text-white rounded-3xl font-black shadow-lg shadow-blue-200 uppercase text-xs tracking-widest">Save Data</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    function handleMultipleFiles(e) {
-        const container = document.getElementById('multiPreview');
-        container.innerHTML = ""; // Clear purani photos
-        Array.from(e.target.files).forEach(file => {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.className = "h-20 w-full object-cover rounded-lg border shadow-sm";
-            container.appendChild(img);
-        });
-        alert("Badshah, " + e.target.files.length + " photos select ho gayi hain!");
-    }
+    <nav class="fixed bottom-6 left-6 right-6 h-20 glass-nav border border-slate-200 rounded-[2.5rem] shadow-2xl flex items-center justify-around px-2 z-50">
+        <button onclick="showTab('dashboard')" class="flex flex-col items-center gap-1 text-blue-600">
+            <i class="fa fa-house-user text-xl"></i>
+            <span class="text-[9px] font-black uppercase">Root</span>
+        </button>
+        
+        <button onclick="openModal()" class="bg-blue-600 text-white w-16 h-16 rounded-2xl shadow-xl -mt-14 flex items-center justify-center border-4 border-slate-50 active:rotate-90 transition-all">
+            <i class="fa fa-plus text-2xl"></i>
+        </button>
+        
+        <button onclick="showTab('law')" class="flex flex-col items-center gap-1 text-slate-400">
+            <i class="fa fa-gavel text-xl"></i>
+            <span class="text-[9px] font-black uppercase">Law Grid</span>
+        </button>
+    </nav>
 
-    // Modal mein Column data save karne ke liye script
-    function saveNote() {
-        const val = document.getElementById('noteInp').value;
-        if(!val) return;
-        
-        // Agar Law tab active hai toh table mein dalo
-        const table = document.getElementById('evalTable');
-        const row = table.insertRow(0);
-        row.innerHTML = `
-            <td class="p-3 border-r border-b border-slate-100">${val.split('|')[0] || 'Q'}</td>
-            <td class="p-3 border-r border-b border-slate-100 text-blue-600">${val.split('|')[1] || 'ICAI'}</td>
-            <td class="p-3 border-b border-slate-100 font-bold">${val.split('|')[2] || 'Ans'}</td>
-        `;
-        
-        document.getElementById('noteInp').value = "";
-        closeModal();
-    }
-</script>
+    <script>
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            // Reset color logic can be added here
+        }
+
+        function openModal() { document.getElementById('modal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+        function saveNote() {
+            const input = document.getElementById('noteInp').value;
+            if(!input) return;
+            const parts = input.split('|');
+
+            // 1. Add to Table (Law Evaluation)
+            const table = document.getElementById('evalTable');
+            const row = table.insertRow(0);
+            row.className = "hover:bg-blue-50 transition";
+            row.innerHTML = `
+                <td class="p-3 border-r font-black text-slate-800">${parts[0] || '-'}</td>
+                <td class="p-3 border-r text-blue-600 italic font-bold">${parts[1] || '-'}</td>
+                <td class="p-3 font-black text-green-600">${parts[2] || '-'}</td>
+            `;
+
+            // 2. Add to Study Root (Dashboard)
+            const container = document.getElementById('notesContainer');
+            if(container.querySelector('p')) container.innerHTML = ""; // Clear placeholder
+            const div = document.createElement('div');
+            div.className = "p-4 bg-blue-50 rounded-2xl border-l-4 border-blue-600 shadow-sm text-xs font-bold text-slate-700";
+            div.innerHTML = `⭐ ${parts[0] || 'Note Saved'}`;
+            container.prepend(div);
+
+            document.getElementById('noteInp').value = "";
+            closeModal();
+            alert("Badshah, Data Saved Successfully!");
+        }
+
+        function handleFiles(e) {
+            const grid = document.getElementById('previewGrid');
+            grid.innerHTML = "";
+            Array.from(e.target.files).forEach(file => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.className = "h-20 w-full object-cover rounded-xl border-2 border-white shadow-md";
+                grid.appendChild(img);
+            });
+            alert(e.target.files.length + " Photos Attached!");
+        }
+
+        function checkSearch() {
+            const v = document.getElementById('searchInput').value.toUpperCase();
+            document.getElementById('rootAnalysis').className = (v === "STUDY ROOT") ? "block space-y-3" : "hidden";
+        }
+    </script>
+</body>
+</html>
