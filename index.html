@@ -1,101 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A&L BADSHAH</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        button:active { transform: scale(0.9); }
-    </style>
-</head>
-<body class="bg-slate-50 font-sans pb-32">
-    <div class="max-w-md mx-auto p-5">
-        <header class="mb-6">
-            <h1 class="text-3xl font-bold text-slate-800">A&L <span class="text-blue-600">BADSHAH</span></h1>
-            <div class="mt-4 relative">
-                <i class="fa fa-search absolute left-4 top-3.5 text-slate-400"></i>
-                <input type="text" id="searchInput" oninput="checkSearch()" placeholder='Search "STUDY ROOT"...' class="w-full pl-12 pr-4 py-3 rounded-2xl shadow-sm outline-none border-none">
-            </div>
-        </header>
-
-        <div id="dashboard" class="tab-content active space-y-4">
-            <div id="rootAnalysis" class="hidden bg-white p-5 rounded-3xl border-2 border-blue-500 shadow-lg">
-                <h3 class="text-blue-600 font-bold mb-2">🚀 ROOT ANALYSIS ACTIVE</h3>
-                <div id="notesContainer" class="space-y-2 text-sm"></div>
-            </div>
-            <div class="bg-blue-600 p-6 rounded-3xl text-white">
-                <p class="text-xs font-bold opacity-70 uppercase">Mission</p>
-                <p class="text-2xl font-black italic">90+ ACCOUNTS | 60+ LAW</p>
-            </div>
-        </div>
-
-        <div id="accounts" class="tab-content space-y-4">
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-                <h3 class="font-bold text-lg mb-2">BRS Up-Down Logic</h3>
-                <p class="text-sm text-slate-600 p-3 bg-green-50 rounded-xl"><b>Logic:</b> Jo book target hai, waisa hi bano. Agar Cash Book (Target) badh rahi hai, toh plus karo!</p>
-            </div>
-        </div>
-
-        <div id="law" class="tab-content space-y-4 text-center">
-            <div class="bg-white p-8 rounded-3xl border-2 border-dashed border-blue-300">
-                <i class="fa fa-upload text-4xl text-blue-500 mb-4"></i>
-                <h3 class="font-bold mb-2 text-slate-800">Upload Mock Test</h3>
-                <input type="file" id="fileInp" class="hidden" onchange="showImg(event)">
-                <label for="fileInp" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold cursor-pointer">SELECT PHOTO</label>
-                <img id="preview" class="mt-4 rounded-xl hidden w-full shadow-md">
-            </div>
-        </div>
+<div id="law" class="tab-content space-y-4">
+    <div class="bg-white p-6 rounded-3xl border-2 border-dashed border-blue-300 text-center">
+        <i class="fa fa-copy text-4xl text-blue-500 mb-2"></i>
+        <h3 class="font-bold text-slate-800">Mock Test Upload</h3>
+        <p class="text-[10px] text-slate-400 mb-4">Multiple photos select karein (Question + Answer)</p>
+        
+        <input type="file" id="fileInp" multiple class="hidden" onchange="handleMultipleFiles(event)">
+        <label for="fileInp" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold cursor-pointer inline-block shadow-lg">UPLOAD ALL PHOTOS</label>
+        
+        <div id="multiPreview" class="grid grid-cols-3 gap-2 mt-4"></div>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-6 z-[100]">
-        <div class="bg-white w-full p-6 rounded-3xl shadow-2xl">
-            <h3 class="font-bold text-xl mb-4 text-slate-800">Save Daily Logic</h3>
-            <textarea id="noteInp" class="w-full p-4 bg-slate-100 rounded-2xl mb-4 h-32 outline-none border-none" placeholder="Enter logic (e.g. BRS Rule 1)"></textarea>
-            <div class="flex gap-2">
-                <button onclick="closeModal()" class="flex-1 py-4 font-bold text-slate-400">Cancel</button>
-                <button onclick="saveNote()" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg">SAVE</button>
-            </div>
-        </div>
+    <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-100">
+        <table class="w-full text-[11px] text-left border-collapse">
+            <thead class="bg-slate-800 text-white font-bold uppercase">
+                <tr>
+                    <th class="p-3 border-r border-slate-700">Question</th>
+                    <th class="p-3 border-r border-slate-700">Suggested</th>
+                    <th class="p-3">Final Ans</th>
+                </tr>
+            </thead>
+            <tbody id="evalTable" class="text-slate-600 bg-white font-medium italic">
+                <tr>
+                    <td class="p-3 border-r border-b border-slate-100">Click + to add</td>
+                    <td class="p-3 border-r border-b border-slate-100 italic">ICAI Key...</td>
+                    <td class="p-3 border-b border-slate-100">Review...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <nav class="fixed bottom-6 left-6 right-6 bg-white border border-slate-200 h-20 rounded-[2rem] shadow-2xl flex items-center justify-around px-2 z-50">
-        <button onclick="showTab('dashboard')" class="flex flex-col items-center gap-1 text-blue-600"><i class="fa fa-house text-xl"></i><span class="text-[10px] font-bold">ROOT</span></button>
-        <button onclick="openModal()" class="bg-blue-600 text-white w-14 h-14 rounded-2xl shadow-xl -mt-12 flex items-center justify-center border-4 border-slate-50"><i class="fa fa-plus text-xl"></i></button>
-        <button onclick="showTab('law')" class="flex flex-col items-center gap-1 text-slate-400"><i class="fa fa-gavel text-xl"></i><span class="text-[10px] font-bold">LAW</span></button>
-        <button onclick="showTab('accounts')" class="flex flex-col items-center gap-1 text-slate-400"><i class="fa fa-calculator text-xl"></i><span class="text-[10px] font-bold">ACC</span></button>
-    </nav>
+<script>
+    function handleMultipleFiles(e) {
+        const container = document.getElementById('multiPreview');
+        container.innerHTML = ""; // Clear purani photos
+        Array.from(e.target.files).forEach(file => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = "h-20 w-full object-cover rounded-lg border shadow-sm";
+            container.appendChild(img);
+        });
+        alert("Badshah, " + e.target.files.length + " photos select ho gayi hain!");
+    }
 
-    <script>
-        function showTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-        function openModal() { document.getElementById('modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-        function saveNote() {
-            const val = document.getElementById('noteInp').value;
-            if(!val) return;
-            const div = document.createElement('div');
-            div.className = "p-3 bg-blue-50 rounded-xl mb-2 border border-blue-100";
-            div.innerHTML = `⭐ ${val}`;
-            document.getElementById('notesContainer').appendChild(div);
-            document.getElementById('noteInp').value = "";
-            closeModal();
-            alert("Memory Saved, Badshah!");
-        }
-        function checkSearch() {
-            const v = document.getElementById('searchInput').value.toUpperCase();
-            document.getElementById('rootAnalysis').className = (v === "STUDY ROOT") ? "block bg-white p-5 rounded-3xl border-2 border-blue-500 mb-4" : "hidden";
-        }
-        function showImg(e) {
-            const p = document.getElementById('preview');
-            p.src = URL.createObjectURL(e.target.files[0]);
-            p.classList.remove('hidden');
-        }
-    </script>
-</body>
-</html>
+    // Modal mein Column data save karne ke liye script
+    function saveNote() {
+        const val = document.getElementById('noteInp').value;
+        if(!val) return;
+        
+        // Agar Law tab active hai toh table mein dalo
+        const table = document.getElementById('evalTable');
+        const row = table.insertRow(0);
+        row.innerHTML = `
+            <td class="p-3 border-r border-b border-slate-100">${val.split('|')[0] || 'Q'}</td>
+            <td class="p-3 border-r border-b border-slate-100 text-blue-600">${val.split('|')[1] || 'ICAI'}</td>
+            <td class="p-3 border-b border-slate-100 font-bold">${val.split('|')[2] || 'Ans'}</td>
+        `;
+        
+        document.getElementById('noteInp').value = "";
+        closeModal();
+    }
+</script>
