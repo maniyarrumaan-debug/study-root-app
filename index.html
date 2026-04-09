@@ -1,141 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A&L BADSHAH FINAL</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .badshah-card { background: white; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        button:active { transform: scale(0.95); }
-        .nav-active { color: #2563eb !important; border-top: 3px solid #2563eb; }
-    </style>
-</head>
-<body class="bg-slate-50 font-sans pb-32">
-    <div class="max-w-md mx-auto p-4">
-        
-        <header class="flex justify-between items-center mb-6 px-1">
-            <h1 class="text-2xl font-black text-slate-800 tracking-tighter uppercase">A&L <span class="text-blue-600">Badshah</span></h1>
-            <span class="bg-blue-600 text-white text-[10px] px-3 py-1 rounded-full font-bold">V.FINAL</span>
-        </header>
+import { useState } from "react";
 
-        <div id="dashboard" class="tab-content active space-y-4">
-            <input type="text" id="searchInput" oninput="checkSearch()" placeholder='Type "STUDY ROOT" for progress...' 
-                   class="w-full p-4 rounded-2xl shadow-sm border-none outline-none font-bold bg-white text-blue-600">
+export default function CharteredReelsApp() { const [userId, setUserId] = useState(""); const [adminInput, setAdminInput] = useState(""); const [isAdmin, setIsAdmin] = useState(false);
 
-            <div id="rootAnalysis" class="hidden badshah-card p-5 border-2 border-blue-500">
-                <h3 class="text-blue-600 font-black text-xs mb-3 italic">🚀 MISSION 90+ PROGRESS</h3>
-                <div id="notesContainer" class="space-y-3"></div>
-            </div>
+const adminLogin = () => { if (adminInput === "333888") { setIsAdmin(true); localStorage.setItem("chartered_admin", "true"); } else { alert("Wrong Admin ID"); } };
 
-            <div class="bg-slate-900 text-white p-6 rounded-[2rem] shadow-xl">
-                <p class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Logic Focus</p>
-                <p class="text-sm font-medium mt-1 italic">"Concept First, Accounting Terms Second."</p>
-            </div>
+const createUserId = () => { const newId = "CR-" + Math.floor(100000 + Math.random() * 900000); localStorage.setItem("chartered_user_id", newId); setUserId(newId); };
+
+const savedId = typeof window !== "undefined" ? localStorage.getItem("chartered_user_id") : null;
+
+if (!userId && savedId) { setUserId(savedId); }
+
+if ( typeof window !== "undefined" && localStorage.getItem("chartered_admin") === "true" && !isAdmin ) { setIsAdmin(true); }
+
+const reels = [ { id: 1, user: "@rumaan", caption: "Welcome to Chartered Reels 🔥", video: "https://www.w3schools.com/html/mov_bbb.mp4", likes: "12.4K", comments: "892", shares: "210", avatar: "https://i.pravatar.cc/100?img=12", }, ];
+
+if (!userId && !isAdmin) { return ( <div className="flex min-h-screen items-center justify-center bg-black px-6 text-white"> <div className="grid w-full max-w-5xl gap-6 md:grid-cols-2"> <div className="rounded-3xl border border-white/10 bg-zinc-900 p-8 text-center shadow-2xl"> <h1 className="mb-2 text-4xl font-bold">Chartered Reels</h1> <p className="mb-8 text-zinc-400"> Login nahi hai. Har user ko ek unique ID milegi. </p>
+
+<div className="rounded-2xl border border-white/10 bg-black p-5 mb-6">
+          <p className="mb-2 text-sm text-zinc-400">New User?</p>
+          <button
+            onClick={createUserId}
+            className="w-full rounded-2xl bg-white px-5 py-4 text-lg font-semibold text-black"
+          >
+            Get User ID
+          </button>
         </div>
+      </div>
 
-        <div id="law" class="tab-content space-y-4">
-            <div class="badshah-card p-6 border-2 border-dashed border-blue-200 text-center">
-                <i class="fa fa-camera text-4xl text-blue-500 mb-2"></i>
-                <h3 class="font-bold text-slate-800">Check My Mock Test</h3>
-                <p class="text-[10px] text-slate-400 mb-4 font-bold uppercase underline">Select Question + Answer Photos</p>
-                
-                <input type="file" id="fileInp" multiple accept="image/*" class="hidden" onchange="handleFiles(event)">
-                <label for="fileInp" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-black cursor-pointer inline-block shadow-lg">UPLOAD ALL</label>
-                
-                <div id="previewGrid" class="grid grid-cols-3 gap-2 mt-4"></div>
-            </div>
+      <div className="rounded-3xl border-2 border-red-500/40 bg-zinc-900 p-8 shadow-2xl">
+        <h2 className="mb-2 text-3xl font-bold text-red-400">Admin Login</h2>
+        <p className="mb-6 text-zinc-400">
+          Sirf admin saare reels aur users control kar sakta hai.
+        </p>
 
-            <div class="badshah-card overflow-hidden border border-slate-100">
-                <div class="bg-slate-800 text-white p-3 text-[10px] font-bold tracking-widest">EVALUATION GRID</div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-[10px] text-left">
-                        <thead class="bg-slate-100 text-slate-500 uppercase">
-                            <tr>
-                                <th class="p-3 border-r">Q. Topic</th>
-                                <th class="p-3 border-r">ICAI Suggested</th>
-                                <th class="p-3">Final Result</th>
-                            </tr>
-                        </thead>
-                        <tbody id="evalTable" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <input
+          value={adminInput}
+          onChange={(e) => setAdminInput(e.target.value)}
+          placeholder="Enter Admin ID"
+          className="mb-4 w-full rounded-2xl border border-white/10 bg-black px-4 py-4 text-white outline-none"
+        />
+
+        <button
+          onClick={adminLogin}
+          className="w-full rounded-2xl bg-red-500 px-5 py-4 text-lg font-bold text-white"
+        >
+          Login as Admin
+        </button>
+
+        <p className="mt-4 text-xs text-zinc-500">
+          Admin ID required for full control panel access.
+        </p>
+      </div>
     </div>
+  </div>
+);
 
-    <div id="modal" class="fixed inset-0 bg-slate-900/90 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-md">
-        <div class="bg-white w-full p-8 rounded-[2.5rem] shadow-2xl">
-            <h3 class="font-black text-xl mb-4">Add Study Note</h3>
-            <p class="text-[9px] text-slate-400 mb-2">FORMAT: <span class="text-blue-600">Topic | Suggested | My Ans</span></p>
-            <textarea id="noteInp" class="w-full p-4 bg-slate-100 rounded-2xl mb-4 h-32 border-none outline-none font-bold" placeholder="Example: BRS | Target Passbook | Tally"></textarea>
-            <div class="flex gap-4">
-                <button onclick="closeModal()" class="flex-1 py-4 font-bold text-slate-400">Cancel</button>
-                <button onclick="saveNote()" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black shadow-lg">SAVE</button>
-            </div>
-        </div>
+}
+
+return ( <div className="flex min-h-screen items-center justify-center bg-black px-6 text-white"> <div className="w-full max-w-md rounded-3xl border border-white/10 bg-zinc-900 p-8 text-center shadow-2xl"> <h1 className="mb-2 text-4xl font-bold">Chartered Reels</h1> <p className="mb-8 text-zinc-400"> Login nahi hai. Har user ko ek unique ID milegi. </p>
+
+<div className="rounded-2xl bg-black p-5 border border-white/10 mb-6">
+        <p className="text-sm text-zinc-400 mb-2">New User?</p>
+        <button
+          onClick={createUserId}
+          className="w-full rounded-2xl bg-white px-5 py-4 text-lg font-semibold text-black transition hover:scale-[1.02]"
+        >
+          Get User ID
+        </button>
+      </div>
+
+      <p className="text-xs text-zinc-500">
+        ID milte hi aap automatically app use kar sakte ho, reel upload,
+        comment, like sab kuch.
+      </p>
     </div>
+  </div>
+);
 
-    <nav class="fixed bottom-0 left-0 right-0 h-20 bg-white border-t border-slate-200 flex items-center justify-around px-2 z-50">
-        <button onclick="showTab('dashboard', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-400 nav-active">
-            <i class="fa fa-home-alt text-xl"></i><span class="text-[9px] font-bold">HOME</span>
+}
+
+return ( <div className="h-screen w-full overflow-y-scroll snap-y snap-mandatory bg-black text-white"> <div className="fixed left-4 top-4 z-50 flex flex-col gap-2"> {isAdmin ? ( <div className="rounded-2xl bg-red-500 px-5 py-3 text-sm font-bold text-white shadow-lg"> ADMIN MODE • ID 333888 </div> ) : ( <div className="rounded-full bg-white px-4 py-2 text-sm font-bold text-black shadow-lg"> User ID: {userId} </div> )} </div>
+
+{reels.map((reel) => (
+    <section
+      key={reel.id}
+      className="relative flex h-screen w-full snap-start items-center justify-center"
+    >
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        src={reel.video}
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+
+      <div className="absolute bottom-24 left-4 z-10 max-w-[75%]">
+        <div className="mb-3 flex items-center gap-3">
+          <img
+            src={reel.avatar}
+            alt="avatar"
+            className="h-12 w-12 rounded-full border-2 border-white"
+          />
+          <div>
+            <h2 className="text-lg font-bold">{reel.user}</h2>
+            <button className="mt-1 rounded-full border border-white px-4 py-1 text-sm hover:bg-white hover:text-black">
+              Follow
+            </button>
+          </div>
+        </div>
+
+        <p className="text-sm">{reel.caption}</p>
+      </div>
+
+      <div className="absolute bottom-28 right-4 z-10 flex flex-col items-center gap-6">
+        <button className="rounded-full bg-white/20 p-3 text-2xl">❤️</button>
+        <button className="rounded-full bg-white/20 p-3 text-2xl">💬</button>
+        <button className="rounded-full bg-white/20 p-3 text-2xl">📤</button>
+      </div>
+
+      <nav className="absolute bottom-0 left-0 z-20 flex w-full items-center justify-around border-t border-white/10 bg-black/90 py-3">
+        <button>🏠</button>
+        <button>🔍</button>
+        <button className="rounded-xl bg-white px-3 py-1 text-2xl text-black">
+          +
         </button>
-        <button onclick="openModal()" class="bg-blue-600 text-white w-14 h-14 rounded-2xl shadow-xl -mt-10 flex items-center justify-center border-4 border-slate-50">
-            <i class="fa fa-plus text-xl"></i>
-        </button>
-        <button onclick="showTab('law', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-400">
-            <i class="fa fa-gavel text-xl"></i><span class="text-[9px] font-bold">LAW GRID</span>
-        </button>
-    </nav>
+        <button>🔔</button>
+        <button>👤</button>
+      </nav>
+    </section>
+  ))}
+</div>
 
-    <script>
-        function showTab(id, btn) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('nav-active');
-        }
-        function openModal() { document.getElementById('modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-
-        function saveNote() {
-            const input = document.getElementById('noteInp').value;
-            if(!input) return;
-            const parts = input.split('|');
-            
-            // Table Entry
-            const table = document.getElementById('evalTable');
-            const row = table.insertRow(0);
-            row.innerHTML = `<td class="p-3 border-r font-bold text-slate-800">${parts[0]||'-'}</td><td class="p-3 border-r text-blue-600 font-medium">${parts[1]||'-'}</td><td class="p-3 font-bold text-green-600">${parts[2]||'-'}</td>`;
-            
-            // Root Entry
-            const div = document.createElement('div');
-            div.className = "p-4 bg-blue-50 rounded-2xl border-l-4 border-blue-600 text-[11px] font-bold";
-            div.innerHTML = `⭐ ${parts[0] || 'Note'}`;
-            document.getElementById('notesContainer').prepend(div);
-
-            document.getElementById('noteInp').value = "";
-            closeModal();
-        }
-
-        function handleFiles(e) {
-            const grid = document.getElementById('previewGrid');
-            grid.innerHTML = "";
-            Array.from(e.target.files).forEach(file => {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.className = "h-20 w-full object-cover rounded-xl border-2 border-white shadow-sm";
-                grid.appendChild(img);
-            });
-        }
-
-        function checkSearch() {
-            const v = document.getElementById('searchInput').value.toUpperCase();
-            document.getElementById('rootAnalysis').className = (v === "STUDY ROOT") ? "block badshah-card p-5 border-2 border-blue-500" : "hidden";
-        }
-    </script>
-</body>
-</html>
+); }
